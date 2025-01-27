@@ -1,0 +1,32 @@
+{
+  "name": "@reflector/dao-client",
+  "version": "1.0.0",
+  "description": "Client for Reflector DAO contract",
+  "author": "info@stellar.expert",
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/daoclient.js",
+  "module": "src/index.js",
+  "homepage": "https://github.com/reflector-network/dao-client",
+  "scripts": {
+    "prepare": "webpack --mode=production --config webpack.config.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reflector-network/dao-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reflector-network/dao-client/issues"
+  },
+  "peerDependencies": {
+    "@stellar/stellar-sdk": ">=13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
+    "babel-loader": "^9.2.1",
+    "jest": "^29.7.0",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

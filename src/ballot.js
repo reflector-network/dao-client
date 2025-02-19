@@ -19,13 +19,12 @@ export enum BallotCategory {
     General = 3,
 }*/
 
-
 /**
  * @typedef {Object} BallotInitParams
- * @property {BallotCategory} - Ballot type
- * @property {string} - Short title
- * @property {string} - Description text or URL
- * @property {string} - Initiator account address
+ * @property {BallotCategory} category - Proposal category
+ * @property {string} title - Short proposal title (max 40 characters)
+ * @property {string} description - More detailed description text or URL (max 160 characters)
+ * @property {string} initiator - Initiator account address
  */
 
 /**

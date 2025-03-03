@@ -1,4 +1,4 @@
-import {Networks, StrKey} from '@stellar/stellar-sdk'
+import {Networks, StrKey, contract} from '@stellar/stellar-sdk'
 import {processSimulationErrors} from './errors.js'
 import ContractClient from './contract-client.js'
 import Ballot from './ballot.js'
@@ -137,14 +137,18 @@ export default class DaoClient {
      * Sets ballot decision based on the DAO members voting (decision requires majority of signatures)
      * @param {bigint} id - Unique ballot ID
      * @param {boolean} accepted - Whether the proposal has been accepted or rejected by the majority of DAO members
-     * @return {Promise<void>}
+     * @param {boolean} [simulateOnly] - Whether to simulate the transaction instead of submitting it (default: false)
+     * @return {Promise<void|contract.AssembledTransaction>}
      * @throws {Error} If the caller doesn't match admin address
      * @throws {Error} If the ballot status is not Draft
      * @throws {Error} If the ballot is not found
      */
-    async vote(id, accepted) {
+    async vote(id, accepted, simulateOnly = false) {
         const tx = await this.client.vote({ballot_id: id, accepted})
         processSimulationErrors(tx)
+        if (simulateOnly) {
+            return tx
+        }
         await tx.signAndSend()
     }
 }

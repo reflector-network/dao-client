@@ -1,4 +1,4 @@
-import {contract} from '@stellar/stellar-sdk'
+import contract from '@stellar/stellar-sdk/contract'
 
 export default class ContractClient extends contract.Client {
     options

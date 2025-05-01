@@ -1,7 +1,9 @@
-import {Networks, StrKey, contract} from '@stellar/stellar-sdk'
+import {Networks, StrKey} from '@stellar/stellar-base'
 import {processSimulationErrors} from './errors.js'
 import ContractClient from './contract-client.js'
 import Ballot from './ballot.js'
+
+const priorityFee = '10000'
 
 export default class DaoClient {
     /**
@@ -12,6 +14,7 @@ export default class DaoClient {
             publicKey: params.publicKey,
             signTransaction: params.signTransaction,
             rpcUrl: params.rpcUrl,
+            allowHttp: true,
             networkPassphrase: params.networkPassphrase || Networks.PUBLIC,
             contractId: params.contractId || 'CBQSUF57OYX4RIMCZV62DKN6JFOTEKPHIZASMJYOUOCNHGNG2P3XQLSE'
         }
@@ -28,7 +31,7 @@ export default class DaoClient {
      * @throws {Error} If the deposit amount is not set for some categories
      */
     async setDeposit(params) {
-        const tx = await this.client.set_deposit({deposit_params: params})
+        const tx = await this.client.set_deposit({deposit_params: params}, {fee: priorityFee})
         processSimulationErrors(tx)
         await tx.signAndSend()
     }
@@ -47,7 +50,7 @@ export default class DaoClient {
             throw new Error('Invalid developer address')
         if (!(operators instanceof Array) || operators.some(op => !StrKey.isValidEd25519PublicKey(op)))
             throw new Error('Invalid operator address')
-        const tx = await this.client.unlock({developer, operators})
+        const tx = await this.client.unlock({developer, operators}, {fee: priorityFee})
         processSimulationErrors(tx)
         await tx.signAndSend()
     }
@@ -73,7 +76,7 @@ export default class DaoClient {
         }
         if (typeof amount !== 'bigint' || !(amount > 0n))
             throw new Error('Invalid amount')
-        const tx = await this.client.claim({claimant, to, amount})
+        const tx = await this.client.claim({claimant, to, amount}, {fee: priorityFee})
         processSimulationErrors(tx)
         await tx.signAndSend()
     }
@@ -99,7 +102,7 @@ export default class DaoClient {
      * @throws {Error} If the caller doesn't match the initiator address
      */
     async createBallot(params) {
-        const tx = await this.client.create_ballot({params})
+        const tx = await this.client.create_ballot({params}, {fee: priorityFee})
         processSimulationErrors(tx)
         const res = await tx.signAndSend()
         return res.result
@@ -115,7 +118,7 @@ export default class DaoClient {
      * @throws {Error} If the voting period is not over
      */
     async retractBallot(id) {
-        const tx = await this.client.retract_ballot({ballot_id: id})
+        const tx = await this.client.retract_ballot({ballot_id: id}, {fee: priorityFee})
         processSimulationErrors(tx)
         await tx.signAndSend()
     }
@@ -144,7 +147,7 @@ export default class DaoClient {
      * @throws {Error} If the ballot is not found
      */
     async vote(id, accepted, simulateOnly = false) {
-        const tx = await this.client.vote({ballot_id: id, accepted})
+        const tx = await this.client.vote({ballot_id: id, accepted}, {fee: priorityFee})
         processSimulationErrors(tx)
         if (simulateOnly) {
             return tx

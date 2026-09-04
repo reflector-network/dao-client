@@ -1,4 +1,4 @@
-import {Networks, StrKey} from '@stellar/stellar-base'
+import {Networks, StrKey} from '@stellar/stellar-sdk'
 import {processSimulationErrors} from './errors.js'
 import ContractClient from './contract-client.js'
 import Ballot from './ballot.js'

@@ -6,3 +6,4 @@ pnpm-lock.yaml
 .vscode
 
 lib
+!lib/package.json
